@@ -1,0 +1,52 @@
+platform: 'apple'
+appStoreConnectP8PrivateKeyFilePath: '' # APPLE STORE CONNECT API PRIVATE .p8 KEY File Path
+appStoreConnectP8PrivateKeyID: '' # APPLE STORE CONNECT API PRIVATE KEY ID
+appStoreConnectIssueID: '' # APPLE STORE CONNECT ISSUE ID
+appID: '' # APP ID
+processors:
+    - FilterProcessor:
+        class: "FilterProcessor"
+        enable: true # enable
+        keywordsInclude: [] # keywords you want to filter out
+        ratingsInclude: [] # ratings you want to filter out
+        territoriesInclude: [] # territories you want to filter out (territory for Apple e.g. TWN)
+    - GoogleTranslateProcessor: # Google Translate Processor, will translate review text to your language, you can remove whole block if you don't needed it.
+        class: "GoogleTranslateProcessor"
+        enable: false # enable
+        googleTranslateAPIKeyFilePath: '' # Google Translate API Service Account Credential .json File Path
+        googleTranslateTargetLang: 'zh-TW' # Translate to what Language
+        googleTranslateTerritoriesExclude: ["TWN","CHN"] # Review origin Territory that you don't want to translate. (territory for Apple e.g. TWN)
+    - SlackProcessor: # Slack Processor, resend App Review to Slack.
+        class: "SlackProcessor"
+        enable: true # enable
+        slackTimeZoneOffset: "+08:00" # Review Created Date TimeZone
+        slackAttachmentGroupByNumber: "1" # 1~100, how many review message in 1 slack message.
+        slackBotToken: "" # Slack Bot Token, send slack message throught Slack Bot.
+        slackBotTargetChannel: "" # Slack Bot Token, send slack message throught Slack Bot. (recommended, first priority)
+        slackInCommingWebHookURL: "" # Slack In-Comming WebHook URL, Send slack message throught In-Comming WebHook, not recommended, deprecated.
+    - GoogleSheetProcessor: # Google Sheet Processor, log review to google sheet
+        class: "GoogleSheetProcessor"
+        enable: false # enable
+        googleSheetAPIKeyFilePath: "" # Google Translate API Service Account Credential .json File Path
+        googleSheetTimeZoneOffset: "+08:00" # Review Created Date TimeZone
+        googleSpreadsheetID: "1_lc82p-epecVKwpUWlXh1yyNWaSrygzDb8I0QH2xkTI" # Google Sheet SpreadSheet ID, you can get it on google sheet url: e.g. https://docs.google.com/spreadsheets/d/googleSpreadsheetID/
+        googleSheetInsertStyle:
+            - type: "append" # Google Sheet Insert type, append or insert
+            - at: 0 # required if type is insert, where index should insert at
+            - sheetID: null # required if type is insert, the sheet ID, you can get it on google sheet url: e.g. https://docs.google.com/spreadsheets/d/googleSpreadsheetID/edit#gid=sheetID
+            - sheetName: "Sheet1" # required if type is append, a.k.a google sheet tab name
+        values: ["%RATING%","%TITLE%\n%BODY%","%APPVERSION%","%CREATEDDATE%"] # Columns Data, you can uses magic variable below to compose string.
+        # %TITLE% for review's title
+        # %BODY% for review's content
+        # %RATING% for review's rating 1~5
+        # %PLATFORM% for review's platform Apple or Android
+        # %ID% for review's ID
+        # %USERNAME% for review's reviewer username
+        # %URL% for link to review
+        # %TERRITORY% for review's territory (territory for Apple e.g. TWN)
+        # %APPVERSION% for review's reviewer app version
+        # %CREATEDDATE% for review's created date
+        
+        keywordsInclude: [] # keywords you want to filter out
+        ratingsInclude: [] # ratings you want to filter out
+        territoriesInclude: [] # territories you want to filter out (territory for Apple e.g. TWN)
