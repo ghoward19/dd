@@ -1,0 +1,14 @@
+name: ZReviewTender
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 */6 * * *" #check new review every 6 hour.
+
+jobs:
+  ZReviewTender:
+    runs-on: ubuntu-latest
+    steps:
+    - name: ZReviewTender Automatic Bot
+      uses: ZhgChgLi/ZReviewTender@main
+      with:
+        command: '-r'
